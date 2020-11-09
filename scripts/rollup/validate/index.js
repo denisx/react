@@ -11,6 +11,7 @@ const {
   NODE_ES2015,
   UMD_DEV,
   UMD_PROD,
+  UMD_PROD_ES6,
   UMD_PROFILING,
   NODE_DEV,
   NODE_PROD,
@@ -30,6 +31,7 @@ function getFormat(bundleType) {
   switch (bundleType) {
     case UMD_DEV:
     case UMD_PROD:
+    case UMD_PROD_ES6:
     case UMD_PROFILING:
       return 'umd';
     case NODE_ES2015:

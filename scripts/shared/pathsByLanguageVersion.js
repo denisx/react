@@ -19,10 +19,14 @@ const esNextPaths = [
   // Shims and Flow environment
   'scripts/flow/*.js',
   'scripts/rollup/shims/**/*.js',
+  // 'packages/*/npm/**/*.es6.min.js'
 ];
 
 // Files that we distribute on npm that should be ES5-only.
-const es5Paths = ['packages/*/npm/**/*.js'];
+const es5Paths = [
+  // 'packages/*/npm/**/*(!es6)*.js',
+  'packages/*/npm/**/*.js'
+];
 
 module.exports = {
   esNextPaths,

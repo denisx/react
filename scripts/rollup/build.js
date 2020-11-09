@@ -48,6 +48,7 @@ const {
   NODE_ES2015,
   UMD_DEV,
   UMD_PROD,
+  UMD_PROD_ES6,
   UMD_PROFILING,
   NODE_DEV,
   NODE_PROD,
@@ -109,6 +110,11 @@ const closureOptions = {
   process_common_js_modules: false,
   rewrite_polyfills: false,
   inject_libraries: false,
+};
+
+const closureOptions2015 = {
+  ...closureOptions,
+  language_out: 'ECMASCRIPT_2015',
 };
 
 // Non-ES2015 stuff applied before closure compiler.
@@ -201,6 +207,7 @@ function getBabelConfig(
       });
     case UMD_DEV:
     case UMD_PROD:
+    case UMD_PROD_ES6:
     case UMD_PROFILING:
     case NODE_DEV:
     case NODE_PROD:
@@ -243,6 +250,7 @@ function getFormat(bundleType) {
   switch (bundleType) {
     case UMD_DEV:
     case UMD_PROD:
+    case UMD_PROD_ES6:
     case UMD_PROFILING:
       return `umd`;
     case NODE_ES2015:
@@ -272,6 +280,7 @@ function isProductionBundleType(bundleType) {
     case RN_FB_DEV:
       return false;
     case UMD_PROD:
+    case UMD_PROD_ES6:
     case NODE_PROD:
     case UMD_PROFILING:
     case NODE_PROFILING:
@@ -300,6 +309,7 @@ function isProfilingBundleType(bundleType) {
     case RN_OSS_PROD:
     case UMD_DEV:
     case UMD_PROD:
+    case UMD_PROD_ES6:
       return false;
     case FB_WWW_PROFILING:
     case NODE_PROFILING:
@@ -345,6 +355,7 @@ function getPlugins(
   const isUMDBundle =
     bundleType === UMD_DEV ||
     bundleType === UMD_PROD ||
+    bundleType === UMD_PROD_ES6 ||
     bundleType === UMD_PROFILING;
   const isFBWWWBundle =
     bundleType === FB_WWW_DEV ||
@@ -410,7 +421,7 @@ function getPlugins(
     // Please don't enable this for anything else!
     isUMDBundle && entry === 'react-art' && commonjs(),
     // Apply dead code elimination and/or minification.
-    isProduction &&
+    isProduction && !UMD_PROD_ES6 &&
       closure(
         Object.assign({}, closureOptions, {
           // Don't let it create global variables in the browser.
@@ -419,6 +430,16 @@ function getPlugins(
           renaming: !shouldStayReadable,
         })
       ),
+    // Apply dead code elimination and/or minification.
+    isProduction && UMD_PROD_ES6 &&
+    closure(
+      Object.assign({}, closureOptions2015, {
+        // Don't let it create global variables in the browser.
+        // https://github.com/facebook/react/issues/10909
+        assume_function_wrapper: !isUMDBundle,
+        renaming: !shouldStayReadable,
+      })
+    ),
     // HACK to work around the fact that Rollup isn't removing unused, pure-module imports.
     // Note that this plugin must be called after closure applies DCE.
     isProduction && stripUnusedImports(pureExternalModules),
@@ -555,6 +576,7 @@ async function createBundle(bundle, bundleType) {
   const shouldBundleDependencies =
     bundleType === UMD_DEV ||
     bundleType === UMD_PROD ||
+    bundleType === UMD_PROD_ES6 ||
     bundleType === UMD_PROFILING;
   const peerGlobals = Modules.getPeerGlobals(bundle.externals, bundleType);
   let externals = Object.keys(peerGlobals);
@@ -728,22 +750,23 @@ async function buildEverything() {
   // eslint-disable-next-line no-for-of-loops/no-for-of-loops
   for (const bundle of Bundles.bundles) {
     bundles.push(
-      [bundle, NODE_ES2015],
-      [bundle, UMD_DEV],
+      // [bundle, NODE_ES2015],
+      // [bundle, UMD_DEV],
       [bundle, UMD_PROD],
-      [bundle, UMD_PROFILING],
-      [bundle, NODE_DEV],
-      [bundle, NODE_PROD],
-      [bundle, NODE_PROFILING],
-      [bundle, FB_WWW_DEV],
-      [bundle, FB_WWW_PROD],
-      [bundle, FB_WWW_PROFILING],
-      [bundle, RN_OSS_DEV],
-      [bundle, RN_OSS_PROD],
-      [bundle, RN_OSS_PROFILING],
-      [bundle, RN_FB_DEV],
-      [bundle, RN_FB_PROD],
-      [bundle, RN_FB_PROFILING]
+      [bundle, UMD_PROD_ES6],
+      // [bundle, UMD_PROFILING],
+      // [bundle, NODE_DEV],
+      // [bundle, NODE_PROD],
+      // [bundle, NODE_PROFILING],
+      // [bundle, FB_WWW_DEV],
+      // [bundle, FB_WWW_PROD],
+      // [bundle, FB_WWW_PROFILING],
+      // [bundle, RN_OSS_DEV],
+      // [bundle, RN_OSS_PROD],
+      // [bundle, RN_OSS_PROFILING],
+      // [bundle, RN_FB_DEV],
+      // [bundle, RN_FB_PROD],
+      // [bundle, RN_FB_PROFILING]
     );
   }
 

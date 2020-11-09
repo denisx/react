@@ -7,6 +7,7 @@ const {
   NODE_ES2015,
   UMD_DEV,
   UMD_PROD,
+  UMD_PROD_ES6,
   UMD_PROFILING,
   NODE_DEV,
   NODE_PROD,
@@ -55,6 +56,16 @@ ${source}`;
 
   /***************** UMD_PROD *****************/
   [UMD_PROD](source, globalName, filename, moduleType) {
+    return `/** @license React v${reactVersion}
+ * ${filename}
+ *
+${license}
+ */
+(function(){${source}})();`;
+  },
+
+  /***************** UMD_PROD_ES6 *****************/
+  [UMD_PROD_ES6](source, globalName, filename, moduleType) {
     return `/** @license React v${reactVersion}
  * ${filename}
  *

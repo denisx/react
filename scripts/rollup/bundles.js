@@ -11,6 +11,7 @@ const bundleTypes = {
   NODE_ES2015: 'NODE_ES2015',
   UMD_DEV: 'UMD_DEV',
   UMD_PROD: 'UMD_PROD',
+  UMD_PROD_ES6: 'UMD_PROD_ES6',
   UMD_PROFILING: 'UMD_PROFILING',
   NODE_DEV: 'NODE_DEV',
   NODE_PROD: 'NODE_PROD',
@@ -30,6 +31,7 @@ const {
   NODE_ES2015,
   UMD_DEV,
   UMD_PROD,
+  UMD_PROD_ES6,
   UMD_PROFILING,
   NODE_DEV,
   NODE_PROD,
@@ -72,6 +74,7 @@ const bundles = [
     bundleTypes: [
       UMD_DEV,
       UMD_PROD,
+      UMD_PROD_ES6,
       UMD_PROFILING,
       NODE_DEV,
       NODE_PROD,
@@ -156,6 +159,7 @@ const bundles = [
     bundleTypes: [
       UMD_DEV,
       UMD_PROD,
+      UMD_PROD_ES6,
       UMD_PROFILING,
       NODE_DEV,
       NODE_PROD,
@@ -181,13 +185,13 @@ const bundles = [
   },
 
   /******* Test Utils *******/
-  {
-    moduleType: RENDERER_UTILS,
-    bundleTypes: [FB_WWW_DEV, NODE_DEV, NODE_PROD, UMD_DEV, UMD_PROD],
-    entry: 'react-dom/test-utils',
-    global: 'ReactTestUtils',
-    externals: ['react', 'react-dom'],
-  },
+  // {
+  //   moduleType: RENDERER_UTILS,
+  //   bundleTypes: [FB_WWW_DEV, NODE_DEV, NODE_PROD, UMD_DEV, UMD_PROD],
+  //   entry: 'react-dom/test-utils',
+  //   global: 'ReactTestUtils',
+  //   externals: ['react', 'react-dom'],
+  // },
 
   /******* React DOM - www - Testing *******/
   {
@@ -199,26 +203,26 @@ const bundles = [
   },
 
   /******* React DOM Server *******/
-  {
-    bundleTypes: [
-      UMD_DEV,
-      UMD_PROD,
-      NODE_DEV,
-      NODE_PROD,
-      FB_WWW_DEV,
-      FB_WWW_PROD,
-    ],
-    moduleType: NON_FIBER_RENDERER,
-    entry: 'react-dom/server.browser',
-    global: 'ReactDOMServer',
-    externals: ['react'],
-    babel: opts =>
-      Object.assign({}, opts, {
-        plugins: opts.plugins.concat([
-          [require.resolve('@babel/plugin-transform-classes'), {loose: true}],
-        ]),
-      }),
-  },
+  // {
+  //   bundleTypes: [
+  //     UMD_DEV,
+  //     UMD_PROD,
+  //     NODE_DEV,
+  //     NODE_PROD,
+  //     FB_WWW_DEV,
+  //     FB_WWW_PROD,
+  //   ],
+  //   moduleType: NON_FIBER_RENDERER,
+  //   entry: 'react-dom/server.browser',
+  //   global: 'ReactDOMServer',
+  //   externals: ['react'],
+  //   babel: opts =>
+  //     Object.assign({}, opts, {
+  //       plugins: opts.plugins.concat([
+  //         [require.resolve('@babel/plugin-transform-classes'), {loose: true}],
+  //       ]),
+  //     }),
+  // },
   {
     bundleTypes: [NODE_DEV, NODE_PROD],
     moduleType: NON_FIBER_RENDERER,
@@ -233,15 +237,15 @@ const bundles = [
   },
 
   /******* React DOM Fizz Server *******/
-  {
-    bundleTypes: __EXPERIMENTAL__
-      ? [NODE_DEV, NODE_PROD, UMD_DEV, UMD_PROD]
-      : [],
-    moduleType: RENDERER,
-    entry: 'react-dom/unstable-fizz.browser',
-    global: 'ReactDOMFizzServer',
-    externals: ['react', 'react-dom/server'],
-  },
+  // {
+  //   bundleTypes: __EXPERIMENTAL__
+  //     ? [NODE_DEV, NODE_PROD, UMD_DEV, UMD_PROD]
+  //     : [],
+  //   moduleType: RENDERER,
+  //   entry: 'react-dom/unstable-fizz.browser',
+  //   global: 'ReactDOMFizzServer',
+  //   externals: ['react', 'react-dom/server'],
+  // },
   {
     bundleTypes: __EXPERIMENTAL__ ? [NODE_DEV, NODE_PROD] : [],
     moduleType: RENDERER,
@@ -251,13 +255,13 @@ const bundles = [
   },
 
   /******* React Transport DOM Server Webpack *******/
-  {
-    bundleTypes: [NODE_DEV, NODE_PROD, UMD_DEV, UMD_PROD],
-    moduleType: RENDERER,
-    entry: 'react-transport-dom-webpack/server.browser',
-    global: 'ReactTransportDOMServer',
-    externals: ['react', 'react-dom/server'],
-  },
+  // {
+  //   bundleTypes: [NODE_DEV, NODE_PROD, UMD_DEV, UMD_PROD],
+  //   moduleType: RENDERER,
+  //   entry: 'react-transport-dom-webpack/server.browser',
+  //   global: 'ReactTransportDOMServer',
+  //   externals: ['react', 'react-dom/server'],
+  // },
   {
     bundleTypes: [NODE_DEV, NODE_PROD],
     moduleType: RENDERER,
@@ -267,22 +271,22 @@ const bundles = [
   },
 
   /******* React Transport DOM Client Webpack *******/
-  {
-    bundleTypes: [NODE_DEV, NODE_PROD, UMD_DEV, UMD_PROD],
-    moduleType: RENDERER,
-    entry: 'react-transport-dom-webpack',
-    global: 'ReactTransportDOMClient',
-    externals: ['react'],
-  },
+  // {
+  //   bundleTypes: [NODE_DEV, NODE_PROD, UMD_DEV, UMD_PROD],
+  //   moduleType: RENDERER,
+  //   entry: 'react-transport-dom-webpack',
+  //   global: 'ReactTransportDOMClient',
+  //   externals: ['react'],
+  // },
 
   /******* React Transport DOM Webpack Plugin *******/
-  {
-    bundleTypes: [NODE_ES2015],
-    moduleType: RENDERER_UTILS,
-    entry: 'react-transport-dom-webpack/plugin',
-    global: 'ReactFlightWebpackPlugin',
-    externals: [],
-  },
+  // {
+  //   bundleTypes: [NODE_ES2015],
+  //   moduleType: RENDERER_UTILS,
+  //   entry: 'react-transport-dom-webpack/plugin',
+  //   global: 'ReactFlightWebpackPlugin',
+  //   externals: [],
+  // },
 
   /******* React Transport DOM Server Relay *******/
   {
@@ -338,31 +342,31 @@ const bundles = [
   },
 
   /******* React ART *******/
-  {
-    bundleTypes: [
-      UMD_DEV,
-      UMD_PROD,
-      NODE_DEV,
-      NODE_PROD,
-      FB_WWW_DEV,
-      FB_WWW_PROD,
-    ],
-    moduleType: RENDERER,
-    entry: 'react-art',
-    global: 'ReactART',
-    externals: ['react'],
-    babel: opts =>
-      Object.assign({}, opts, {
-        // Include JSX
-        presets: opts.presets.concat([
-          require.resolve('@babel/preset-react'),
-          require.resolve('@babel/preset-flow'),
-        ]),
-        plugins: opts.plugins.concat([
-          [require.resolve('@babel/plugin-transform-classes'), {loose: true}],
-        ]),
-      }),
-  },
+  // {
+  //   bundleTypes: [
+  //     UMD_DEV,
+  //     UMD_PROD,
+  //     NODE_DEV,
+  //     NODE_PROD,
+  //     FB_WWW_DEV,
+  //     FB_WWW_PROD,
+  //   ],
+  //   moduleType: RENDERER,
+  //   entry: 'react-art',
+  //   global: 'ReactART',
+  //   externals: ['react'],
+  //   babel: opts =>
+  //     Object.assign({}, opts, {
+  //       // Include JSX
+  //       presets: opts.presets.concat([
+  //         require.resolve('@babel/preset-react'),
+  //         require.resolve('@babel/preset-flow'),
+  //       ]),
+  //       plugins: opts.plugins.concat([
+  //         [require.resolve('@babel/plugin-transform-classes'), {loose: true}],
+  //       ]),
+  //     }),
+  // },
 
   /******* React Native *******/
   {
@@ -425,28 +429,28 @@ const bundles = [
   },
 
   /******* React Test Renderer *******/
-  {
-    bundleTypes: [
-      FB_WWW_DEV,
-      NODE_DEV,
-      NODE_PROD,
-      UMD_DEV,
-      UMD_PROD,
-      RN_FB_DEV,
-      RN_FB_PROD,
-      RN_FB_PROFILING,
-    ],
-    moduleType: RENDERER,
-    entry: 'react-test-renderer',
-    global: 'ReactTestRenderer',
-    externals: ['react', 'scheduler', 'scheduler/unstable_mock'],
-    babel: opts =>
-      Object.assign({}, opts, {
-        plugins: opts.plugins.concat([
-          [require.resolve('@babel/plugin-transform-classes'), {loose: true}],
-        ]),
-      }),
-  },
+  // {
+  //   bundleTypes: [
+  //     FB_WWW_DEV,
+  //     NODE_DEV,
+  //     NODE_PROD,
+  //     UMD_DEV,
+  //     UMD_PROD,
+  //     RN_FB_DEV,
+  //     RN_FB_PROD,
+  //     RN_FB_PROFILING,
+  //   ],
+  //   moduleType: RENDERER,
+  //   entry: 'react-test-renderer',
+  //   global: 'ReactTestRenderer',
+  //   externals: ['react', 'scheduler', 'scheduler/unstable_mock'],
+  //   babel: opts =>
+  //     Object.assign({}, opts, {
+  //       plugins: opts.plugins.concat([
+  //         [require.resolve('@babel/plugin-transform-classes'), {loose: true}],
+  //       ]),
+  //     }),
+  // },
 
   /******* React Noop Renderer (used for tests) *******/
   {
@@ -549,20 +553,20 @@ const bundles = [
   },
 
   /******* React Is *******/
-  {
-    bundleTypes: [
-      NODE_DEV,
-      NODE_PROD,
-      FB_WWW_DEV,
-      FB_WWW_PROD,
-      UMD_DEV,
-      UMD_PROD,
-    ],
-    moduleType: ISOMORPHIC,
-    entry: 'react-is',
-    global: 'ReactIs',
-    externals: [],
-  },
+  // {
+  //   bundleTypes: [
+  //     NODE_DEV,
+  //     NODE_PROD,
+  //     FB_WWW_DEV,
+  //     FB_WWW_PROD,
+  //     UMD_DEV,
+  //     UMD_PROD,
+  //   ],
+  //   moduleType: ISOMORPHIC,
+  //   entry: 'react-is',
+  //   global: 'ReactIs',
+  //   externals: [],
+  // },
 
   /******* React Debug Tools *******/
   {
@@ -627,22 +631,22 @@ const bundles = [
   },
 
   /******* React Scheduler Mock (experimental) *******/
-  {
-    bundleTypes: [
-      UMD_DEV,
-      UMD_PROD,
-      NODE_DEV,
-      NODE_PROD,
-      FB_WWW_DEV,
-      FB_WWW_PROD,
-      RN_FB_DEV,
-      RN_FB_PROD,
-    ],
-    moduleType: ISOMORPHIC,
-    entry: 'scheduler/unstable_mock',
-    global: 'SchedulerMock',
-    externals: [],
-  },
+  // {
+  //   bundleTypes: [
+  //     UMD_DEV,
+  //     UMD_PROD,
+  //     NODE_DEV,
+  //     NODE_PROD,
+  //     FB_WWW_DEV,
+  //     FB_WWW_PROD,
+  //     RN_FB_DEV,
+  //     RN_FB_PROD,
+  //   ],
+  //   moduleType: ISOMORPHIC,
+  //   entry: 'scheduler/unstable_mock',
+  //   global: 'SchedulerMock',
+  //   externals: [],
+  // },
 
   /******* React Scheduler Post Task (experimental) *******/
   {
@@ -766,6 +770,8 @@ function getFilename(bundle, bundleType) {
       return `${name}.development.js`;
     case UMD_PROD:
       return `${name}.production.min.js`;
+    case UMD_PROD_ES6:
+      return `${name}.production.es6.min.js`;
     case UMD_PROFILING:
       return `${name}.profiling.min.js`;
     case NODE_DEV:

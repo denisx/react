@@ -6,6 +6,7 @@ const inlinedHostConfigs = require('../shared/inlinedHostConfigs');
 const {
   UMD_DEV,
   UMD_PROD,
+  UMD_PROD_ES6,
   UMD_PROFILING,
   FB_WWW_DEV,
   FB_WWW_PROD,
@@ -37,6 +38,7 @@ const forks = Object.freeze({
     if (
       bundleType !== UMD_DEV &&
       bundleType !== UMD_PROD &&
+      bundleType !== UMD_PROD_ES6 &&
       bundleType !== UMD_PROFILING
     ) {
       // It's only relevant for UMD bundles since that's where the duplication
@@ -156,6 +158,7 @@ const forks = Object.freeze({
     switch (bundleType) {
       case UMD_DEV:
       case UMD_PROD:
+      case UMD_PROD_ES6:
       case UMD_PROFILING:
         if (dependencies.indexOf('react') === -1) {
           // It's only safe to use this fork for modules that depend on React,
@@ -175,6 +178,7 @@ const forks = Object.freeze({
     switch (bundleType) {
       case UMD_DEV:
       case UMD_PROD:
+      case UMD_PROD_ES6:
       case UMD_PROFILING:
         if (dependencies.indexOf('react') === -1) {
           // It's only safe to use this fork for modules that depend on React,
@@ -240,6 +244,7 @@ const forks = Object.freeze({
     switch (bundleType) {
       case UMD_DEV:
       case UMD_PROD:
+      case UMD_PROD_ES6:
       case UMD_PROFILING:
         return 'react/src/forks/ReactSharedInternals.umd.js';
       default:
