@@ -177,9 +177,15 @@ function getBabelConfig(
       ]
     );
   }
+
+
+
   if (updateBabelOptions) {
     options = updateBabelOptions(options);
   }
+
+
+
   switch (bundleType) {
     case FB_WWW_DEV:
     case FB_WWW_PROD:
@@ -377,18 +383,33 @@ function getPlugins(
         return source;
       },
     },
+
+
+
     // Shim any modules that need forking in this environment.
     useForks(forks),
+
+
+
     // Ensure we don't try to bundle any fbjs modules.
     forbidFBJSImports(),
+
+
+
     // Use Node resolution mechanism.
     resolve({
       skip: externals,
     }),
+
+
+
     // Remove license headers from individual modules
     stripBanner({
       exclude: 'node_modules/**/*',
     }),
+
+
+
     // Compile to ES2015.
     babel(
       getBabelConfig(
@@ -399,12 +420,18 @@ function getPlugins(
         !isProduction
       )
     ),
+
+
+
     // Remove 'use strict' from individual source files.
     {
       transform(source) {
         return source.replace(/['"]use strict["']/g, '');
       },
     },
+
+
+
     // Turn __DEV__ and process.env checks into constants.
     replace({
       __DEV__: isProduction ? 'false' : 'true',
@@ -416,12 +443,18 @@ function getPlugins(
       // NOTE: I did not put much thought into how to configure this.
       __VARIANT__: bundle.enableNewReconciler === true,
     }),
+
+
+
     // The CommonJS plugin *only* exists to pull "art" into "react-art".
     // I'm going to port "art" to ES modules to avoid this problem.
     // Please don't enable this for anything else!
     isUMDBundle && entry === 'react-art' && commonjs(),
+
+
+
     // Apply dead code elimination and/or minification.
-    isProduction && !UMD_PROD_ES6 &&
+    isProduction && bundleType !== UMD_PROD_ES6 &&
       closure(
         Object.assign({}, closureOptions, {
           // Don't let it create global variables in the browser.
@@ -430,8 +463,11 @@ function getPlugins(
           renaming: !shouldStayReadable,
         })
       ),
+
+
+
     // Apply dead code elimination and/or minification.
-    isProduction && UMD_PROD_ES6 &&
+    isProduction && bundleType === UMD_PROD_ES6 &&
     closure(
       Object.assign({}, closureOptions2015, {
         // Don't let it create global variables in the browser.
@@ -440,6 +476,9 @@ function getPlugins(
         renaming: !shouldStayReadable,
       })
     ),
+
+
+
     // HACK to work around the fact that Rollup isn't removing unused, pure-module imports.
     // Note that this plugin must be called after closure applies DCE.
     isProduction && stripUnusedImports(pureExternalModules),
@@ -451,6 +490,9 @@ function getPlugins(
         trailingComma: 'none',
         bracketSpacing: true,
       }),
+
+
+
     // License and haste headers, top-level `if` blocks.
     {
       renderChunk(source) {
@@ -463,6 +505,9 @@ function getPlugins(
         );
       },
     },
+
+
+
     // Record bundle size.
     sizes({
       getSize: (size, gzip) => {
