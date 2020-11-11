@@ -23,6 +23,7 @@ const extractErrorCodes = require('../error-codes/extract-errors');
 const Packaging = require('./packaging');
 const {asyncRimRaf} = require('./utils');
 const codeFrame = require('babel-code-frame');
+const babelPluginMinifyDeadCodeElimination = require('babel-plugin-minify-dead-code-elimination');
 const Wrappers = require('./wrappers');
 
 const RELEASE_CHANNEL = process.env.RELEASE_CHANNEL;
@@ -121,22 +122,23 @@ const closureOptions2015 = {
 const babelPlugins = [
   // These plugins filter out non-ES2015.
   '@babel/plugin-transform-flow-strip-types',
-  ['@babel/plugin-proposal-class-properties', {loose: true}],
-  'syntax-trailing-function-commas',
-  // These use loose mode which avoids embedding a runtime.
-  // TODO: Remove object spread from the source. Prefer Object.assign instead.
-  [
-    '@babel/plugin-proposal-object-rest-spread',
-    {loose: true, useBuiltIns: true},
-  ],
-  ['@babel/plugin-transform-template-literals', {loose: true}],
-  // TODO: Remove for...of from the source. It requires a runtime to be embedded.
-  '@babel/plugin-transform-for-of',
-  // TODO: Remove array spread from the source. Prefer .apply instead.
-  ['@babel/plugin-transform-spread', {loose: true, useBuiltIns: true}],
-  '@babel/plugin-transform-parameters',
-  // TODO: Remove array destructuring from the source. Requires runtime.
-  ['@babel/plugin-transform-destructuring', {loose: true, useBuiltIns: true}],
+  // ['@babel/plugin-proposal-class-properties', {loose: true}],
+  // 'syntax-trailing-function-commas',
+  // // These use loose mode which avoids embedding a runtime.
+  // // TODO: Remove object spread from the source. Prefer Object.assign instead.
+  // [
+  //   '@babel/plugin-proposal-object-rest-spread',
+  //   {loose: true, useBuiltIns: true},
+  // ],
+  ['@babel/plugin-transform-template-literals', {loose: false}],
+  // // TODO: Remove for...of from the source. It requires a runtime to be embedded.
+  // '@babel/plugin-transform-for-of',
+  // // TODO: Remove array spread from the source. Prefer .apply instead.
+  // ['@babel/plugin-transform-spread', {loose: true, useBuiltIns: true}],
+  // '@babel/plugin-transform-parameters',
+  // // TODO: Remove array destructuring from the source. Requires runtime.
+  // ['@babel/plugin-transform-destructuring', {loose: true, useBuiltIns: true}],
+  [babelPluginMinifyDeadCodeElimination, { "optimizeRawSize": true }]
 ];
 
 const babelToES5Plugins = [
@@ -163,6 +165,7 @@ function getBabelConfig(
     babelrc: false,
     configFile: false,
     presets: [],
+    // plugins: [],
     plugins: [...babelPlugins],
   };
   if (isDevelopment) {
@@ -221,7 +224,7 @@ function getBabelConfig(
       return Object.assign({}, options, {
         plugins: options.plugins.concat([
           // Use object-assign polyfill in open source
-          path.resolve('./scripts/babel/transform-object-assign-require'),
+          // path.resolve('./scripts/babel/transform-object-assign-require'),
           // Minify invariant messages
           require('../error-codes/transform-error-messages'),
         ]),
@@ -454,30 +457,28 @@ function getPlugins(
 
 
     // Apply dead code elimination and/or minification.
-    isProduction && bundleType !== UMD_PROD_ES6 &&
-      closure(
-        Object.assign({}, closureOptions, {
-          // Don't let it create global variables in the browser.
-          // https://github.com/facebook/react/issues/10909
-          assume_function_wrapper: !isUMDBundle,
-          renaming: !shouldStayReadable,
-        })
-      ),
+    // isProduction && bundleType !== UMD_PROD_ES6 &&
+    //   closure(
+    //     Object.assign({}, closureOptions, {
+    //       // Don't let it create global variables in the browser.
+    //       // https://github.com/facebook/react/issues/10909
+    //       assume_function_wrapper: !isUMDBundle,
+    //       renaming: !shouldStayReadable,
+    //     })
+    //   ),
 
 
 
     // Apply dead code elimination and/or minification.
-    isProduction && bundleType === UMD_PROD_ES6 &&
-    closure(
-      Object.assign({}, closureOptions2015, {
-        // Don't let it create global variables in the browser.
-        // https://github.com/facebook/react/issues/10909
-        assume_function_wrapper: !isUMDBundle,
-        renaming: !shouldStayReadable,
-      })
-    ),
-
-
+    // isProduction && bundleType === UMD_PROD_ES6 &&
+    // closure(
+    //   Object.assign({}, closureOptions2015, {
+    //     // Don't let it create global variables in the browser.
+    //     // https://github.com/facebook/react/issues/10909
+    //     assume_function_wrapper: !isUMDBundle,
+    //     renaming: !shouldStayReadable,
+    //   })
+    // ),
 
     // HACK to work around the fact that Rollup isn't removing unused, pure-module imports.
     // Note that this plugin must be called after closure applies DCE.
@@ -509,23 +510,23 @@ function getPlugins(
 
 
     // Record bundle size.
-    sizes({
-      getSize: (size, gzip) => {
-        const currentSizes = Stats.currentBuildResults.bundleSizes;
-        const recordIndex = currentSizes.findIndex(
-          record =>
-            record.filename === filename && record.bundleType === bundleType
-        );
-        const index = recordIndex !== -1 ? recordIndex : currentSizes.length;
-        currentSizes[index] = {
-          filename,
-          bundleType,
-          packageName,
-          size,
-          gzip,
-        };
-      },
-    }),
+    // sizes({
+    //   getSize: (size, gzip) => {
+    //     const currentSizes = Stats.currentBuildResults.bundleSizes;
+    //     const recordIndex = currentSizes.findIndex(
+    //       record =>
+    //         record.filename === filename && record.bundleType === bundleType
+    //     );
+    //     const index = recordIndex !== -1 ? recordIndex : currentSizes.length;
+    //     currentSizes[index] = {
+    //       filename,
+    //       bundleType,
+    //       packageName,
+    //       size,
+    //       gzip,
+    //     };
+    //   },
+    // }),
   ].filter(Boolean);
 }
 

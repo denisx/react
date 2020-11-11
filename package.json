@@ -136,5 +136,12 @@
     "version-check": "node ./scripts/tasks/version-check.js",
     "merge-fork": "node ./scripts/merge-fork/merge-fork.js",
     "replace-fork": "node ./scripts/merge-fork/replace-fork.js"
+  },
+  "dependencies": {
+    "babel-plugin-minify-dead-code-elimination": "^0.5.1",
+    "brotli": "^1.3.2",
+    "es-check": "^5.1.2",
+    "gzip": "^0.1.0",
+    "terser": "^5.3.8"
   }
 }

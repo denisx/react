@@ -1,0 +1,32 @@
+{
+  "bundleSizes": [
+    {
+      "filename": "react.production.min.js",
+      "bundleType": "UMD_PROD",
+      "packageName": "react",
+      "size": 11813,
+      "gzip": 4663
+    },
+    {
+      "filename": "react.production.es6.min.js",
+      "bundleType": "UMD_PROD_ES6",
+      "packageName": "react",
+      "size": 11816,
+      "gzip": 4680
+    },
+    {
+      "filename": "react-dom.production.min.js",
+      "bundleType": "UMD_PROD",
+      "packageName": "react-dom",
+      "size": 124186,
+      "gzip": 40771
+    },
+    {
+      "filename": "react-dom.production.es6.min.js",
+      "bundleType": "UMD_PROD_ES6",
+      "packageName": "react-dom",
+      "size": 124758,
+      "gzip": 40971
+    }
+  ]
+}
